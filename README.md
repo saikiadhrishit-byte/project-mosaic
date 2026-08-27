@@ -18,6 +18,41 @@ Most traditional game engines provide a fixed architecture that bundles renderin
 
 The goal is not to force every game into one predetermined engine structure. Instead, the engine should make it easier to assemble the right set of systems for the right kind of game.
 
+## Looking for Contributors
+
+Project Mosaic is currently an experimental, early-stage project, and we are looking for developers interested in exploring and challenging this architecture with us. 
+
+Rather than building a predetermined engine design, the goal of this project is to **investigate whether a modular block-graph architecture actually works** for real-world game development, performance-critical rendering, and compilation pipelines.
+
+You do not need to be an expert in game engines to contribute. The most valuable contributions right now are from people willing to experiment, question the architecture, and build small prototypes around these core ideas.
+
+### Areas where help is especially welcome
+- **C++ / systems programming** — core runtime and engine infrastructure
+- **Vulkan / graphics programming** — rendering and backend experimentation
+- **Compiler / IR design** — graph compilation and intermediate representations
+- **Graph algorithms** — dependency analysis, validation and scheduling
+- **Game-engine architecture** — ECS, data-oriented design and modular systems
+- **Documentation** — explaining the architecture and creating examples
+- **Testing / experimentation** — building small prototypes to validate or challenge design decisions
+
+### Good places to start
+
+If you're new to the project, start with issues labelled:
+- `good first issue`
+- `help wanted`
+- `architecture`
+- `documentation`
+
+You do not need to understand the entire project before contributing. Many tasks are intentionally isolated experiments designed to explore and benchmark one specific part of the architecture.
+
+### What we're looking for
+
+We are especially interested in contributors who want to discuss and shape the architecture, not just implement features. 
+
+Mosaic is an experiment. If you think an architectural decision is wrong, that is highly valuable feedback—and a great opportunity to prototype a better approach.
+
+If you are interested, open an issue or start a discussion describing what you would like to work on!
+
 ## Proposed Architecture
 
 ```text
