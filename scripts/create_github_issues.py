@@ -127,6 +127,45 @@ def create_issues(repo, token, issues, dry_run=False):
             error_msg = res.get('message', 'Unknown error') if res else 'No response'
             print(f"Failed to create Issue #{issue['number']}: \"{title}\". Error: {error_msg}")
 
+def close_existing_issues(repo, token, dry_run=False):
+    print("\nChecking for existing open issues to close...")
+    url = f"https://api.github.com/repos/{repo}/issues?state=open"
+    res, status = github_request(url, token)
+    if status != 200:
+        # If we got a dict or list, handle appropriately
+        msg = res.get('message', 'Unknown error') if isinstance(res, dict) else 'Unknown error'
+        print(f"Warning: Could not fetch existing issues: {msg}")
+        return
+        
+    if not isinstance(res, list):
+        print("Warning: Received invalid response structure when fetching issues.")
+        return
+
+    # Filter out pull requests (issues API returns both issues and PRs)
+    open_issues = [item for item in res if "pull_request" not in item]
+    
+    if not open_issues:
+        print("No open issues found.")
+        return
+        
+    print(f"Found {len(open_issues)} open issues. Closing them...")
+    for issue in open_issues:
+        num = issue["number"]
+        title = issue["title"]
+        patch_url = f"https://api.github.com/repos/{repo}/issues/{num}"
+        
+        if dry_run:
+            print(f"[DRY-RUN] Close issue #{num}: \"{title}\"")
+            continue
+            
+        payload = {"state": "closed", "state_reason": "not_planned"}
+        patch_res, patch_status = github_request(patch_url, token, payload, "PATCH")
+        if patch_status == 200:
+            print(f"Successfully closed issue #{num}: \"{title}\"")
+        else:
+            msg = patch_res.get('message', 'Unknown error') if patch_res else 'Unknown error'
+            print(f"Failed to close issue #{num}: {msg}")
+
 def main():
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(encoding='utf-8')
@@ -136,6 +175,7 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="Create Project Mosaic GitHub issues and labels.")
     parser.add_argument("--dry-run", action="store_true", help="Print actions without modifying GitHub.")
+    parser.add_argument("--recreate", action="store_true", help="Close existing open issues before creating new ones.")
     args = parser.parse_args()
 
     # Locate issues json
@@ -169,6 +209,8 @@ def main():
         unique_labels.update(issue.get("labels", []))
         
     create_labels(repo, token, sorted(unique_labels), dry_run=args.dry_run)
+    if args.recreate:
+        close_existing_issues(repo, token, dry_run=args.dry_run)
     create_issues(repo, token, issues, dry_run=args.dry_run)
     
     if WAS_TOKEN_ERROR:
