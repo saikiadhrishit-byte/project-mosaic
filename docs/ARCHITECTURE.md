@@ -1,6 +1,6 @@
-# Architecture
+﻿# Architecture
 
-Project Mosaic is described as an experimental, composable game-engine architecture. The repository documents a proposed layered execution and development model rather than a completed implementation.
+Project Nysor is described as an experimental, composable game-engine architecture. The repository documents a proposed layered execution and development model rather than a completed implementation.
 
 The proposed flow is:
 
@@ -66,7 +66,7 @@ The system should eventually support different execution environments. A block g
 
 ## Kernel vs Systems
 
-Project Mosaic proposes a small kernel with a large and possibly open ecosystem of modules. A kernel should manage:
+Project Nysor proposes a small kernel with a large and possibly open ecosystem of modules. A kernel should manage:
 
 - graph representation and metadata;
 - validation;

@@ -1,6 +1,6 @@
-# Contributing
+﻿# Contributing
 
-Thank you for your interest in Project Mosaic.
+Thank you for your interest in Project Nysor.
 
 This repository is an early-stage experimental architecture and research project. The goal is to communicate the engine vision clearly enough that developers, compiler designers, engine architects, and contributors can evaluate and improve the design.
 

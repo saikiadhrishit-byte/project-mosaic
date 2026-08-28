@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 import os
 import sys
 import json
@@ -35,7 +35,7 @@ def get_git_remote_repo():
             return match.group(1)
     except Exception:
         pass
-    return "saikiadhrishit-byte/project-mosaic"
+    return "saikiadhrishit-byte/project-nysor"
 
 WAS_TOKEN_ERROR = False
 
@@ -44,7 +44,7 @@ def github_request(url, token, data=None, method="GET"):
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json",
-        "User-Agent": "Project-Mosaic-Issue-Creator",
+        "User-Agent": "Project-Nysor-Issue-Creator",
         "Content-Type": "application/json"
     }
     
@@ -84,7 +84,7 @@ def create_labels(repo, token, labels, dry_run=False):
         payload = {
             "name": label,
             "color": color,
-            "description": f"Mosaic {label} topic"
+            "description": f"Nysor {label} topic"
         }
         res, status = github_request(url, token, payload, "POST")
         if status == 201:
@@ -173,7 +173,7 @@ def main():
         sys.stderr.reconfigure(encoding='utf-8')
 
     import argparse
-    parser = argparse.ArgumentParser(description="Create Project Mosaic GitHub issues and labels.")
+    parser = argparse.ArgumentParser(description="Create Project Nysor GitHub issues and labels.")
     parser.add_argument("--dry-run", action="store_true", help="Print actions without modifying GitHub.")
     parser.add_argument("--recreate", action="store_true", help="Close existing open issues before creating new ones.")
     args = parser.parse_args()
@@ -221,7 +221,7 @@ def main():
         print("\nIf you are using a Fine-Grained Token:")
         print("1. Go to: Settings -> Developer Settings -> Personal Access Tokens -> Fine-grained tokens")
         print("2. Edit your token and ensure 'Repository access' is set to 'All repositories'")
-        print("   or explicitly select 'project-mosaic' under 'Only select repositories'.")
+        print("   or explicitly select 'project-nysor' under 'Only select repositories'.")
         print("3. Under 'Repository permissions', set 'Issues' to 'Read and write'.")
         print("4. Save/update the token and run this script again.")
         print("\nIf you are using a Classic Token:")

@@ -1,4 +1,4 @@
-# Block Standard
+﻿# Block Standard
 
 This document is an initial draft specification for the idea of a Block Standard. It is intentionally not a final specification. The purpose is to define what a block might declare and how a block might participate in a graph, validation pass, package ecosystem, and runtime plan.
 

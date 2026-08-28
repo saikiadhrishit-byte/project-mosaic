@@ -1,4 +1,4 @@
----
+﻿---
 name: Feature request
 about: Suggest a project direction, architecture idea, or research topic
 title: ""

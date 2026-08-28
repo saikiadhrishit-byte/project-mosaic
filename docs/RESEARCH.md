@@ -1,6 +1,6 @@
-# Research
+﻿# Research
 
-Project Mosaic is an experimental research project focused on architecture, graph modeling, compiler-style analysis, and modular engine design. It should not pretend that any implementation has already solved all of the large technical problems identified below.
+Project Nysor is an experimental research project focused on architecture, graph modeling, compiler-style analysis, and modular engine design. It should not pretend that any implementation has already solved all of the large technical problems identified below.
 
 ## Existing Technologies and Projects to Study
 

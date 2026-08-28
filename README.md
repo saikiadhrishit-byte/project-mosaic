@@ -1,6 +1,6 @@
-# Project Mosaic
+﻿# Project Nysor
 
-Project Mosaic is an experimental open-source game-engine architecture project exploring a different kind of engine foundation: a small, stable kernel with a large ecosystem of replaceable, composable, and inspectable systems.
+Project Nysor is an experimental open-source game-engine architecture project exploring a different kind of engine foundation: a small, stable kernel with a large ecosystem of replaceable, composable, and inspectable systems.
 
 The project describes an ambition often summarized as "The VS Code of Game Engines": not one fixed engine structure, but a shared core and a library of interchangeable blocks, systems, and packages that developers can assemble for different game domains.
 
@@ -8,7 +8,7 @@ This repository is intentionally in the design and research stage. It does not c
 
 ## Modular Engine Philosophy
 
-Most traditional game engines provide a fixed architecture that bundles rendering, physics, animation, audio, AI, and scripting into a single engine shape. Project Mosaic proposes the opposite direction:
+Most traditional game engines provide a fixed architecture that bundles rendering, physics, animation, audio, AI, and scripting into a single engine shape. Project Nysor proposes the opposite direction:
 
 - keep a small engine kernel;
 - model major systems as modular blocks and extension packages;
@@ -20,7 +20,7 @@ The goal is not to force every game into one predetermined engine structure. Ins
 
 ## Looking for Contributors
 
-Project Mosaic is currently an experimental, early-stage project, and we are looking for developers interested in exploring and challenging this architecture with us. 
+Project Nysor is currently an experimental, early-stage project, and we are looking for developers interested in exploring and challenging this architecture with us. 
 
 Rather than building a predetermined engine design, the goal of this project is to **investigate whether a modular block-graph architecture actually works** for real-world game development, performance-critical rendering, and compilation pipelines.
 
@@ -49,7 +49,7 @@ You do not need to understand the entire project before contributing. Many tasks
 
 We are especially interested in contributors who want to discuss and shape the architecture, not just implement features. 
 
-Mosaic is an experiment. If you think an architectural decision is wrong, that is highly valuable feedback—and a great opportunity to prototype a better approach.
+Nysor is an experiment. If you think an architectural decision is wrong, that is highly valuable feedback—and a great opportunity to prototype a better approach.
 
 If you are interested, open an issue or start a discussion describing what you would like to work on!
 
@@ -86,7 +86,7 @@ The documentation in this repository is meant to communicate the early architect
 
 ## Status
 
-Project Mosaic is an experimental architecture and research project. It is not a completed engine and should not be treated as one. This repository focuses on:
+Project Nysor is an experimental architecture and research project. It is not a completed engine and should not be treated as one. This repository focuses on:
 
 1. communicating the vision;
 2. documenting open architectural questions;
@@ -105,6 +105,50 @@ The initial roadmap is intentionally conservative:
 5. Optimization experiments.
 6. Minimal runtime.
 7. A first real engine experiment using a tiny 2D system.
+
+## Minimal C++ Prototype
+
+The repository now includes a small Phase 1 prototype in `include/nysor` and
+`examples/basic_graph.cpp`. It models scalar `Constant`, `Add`, `Subtract`,
+`Multiply`, `Divide`, and `Output` blocks.
+
+Its pipeline is intentionally direct:
+
+```text
+Block Graph -> Validation -> Tiny IR -> Taskflow Execution
+```
+
+The prototype validates input counts, forward references, divide-by-zero
+constants, and the required final `Output` block. The lowered IR becomes a
+Taskflow dependency graph, allowing independent blocks to be scheduled in
+parallel. Optimization passes are deliberately absent at this stage.
+
+Build it with CMake:
+
+```text
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
+
+The optional `nysor_editor` target adds Dear ImGui, GLFW, and imnodes for a
+small graph workspace. It depends on Nysor Core but Nysor Core does not
+depend on the editor. Disable it with `-DNYSOR_BUILD_EDITOR=OFF` when building
+headless or embedding the core elsewhere.
+
+## Dependency Analysis Experiment
+
+The core test also exercises the Nysor 0.2 boundary:
+
+```text
+Nysor Graph -> Dependency Analysis -> Nysor Execution Levels
+                                      -> Taskflow Graph -> Taskflow Execution
+```
+
+Nysor owns the semantic edges and execution levels. The Taskflow adapter
+consumes those analyzed edges to execute the graph; it does not decide graph
+meaning or replace Nysor validation. The test verifies that independent
+branches remain independent and that the Taskflow-backed result is `35`.
 
 ## Contributing and Critique
 

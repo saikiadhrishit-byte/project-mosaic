@@ -1,12 +1,12 @@
-# Vision
+﻿# Vision
 
-Project Mosaic explores a game-engine architecture where the engine core is deliberately small, stable, and inspectable, while major engine systems are represented as blocks, graphs, modules, packages, and extension ecosystems.
+Project Nysor explores a game-engine architecture where the engine core is deliberately small, stable, and inspectable, while major engine systems are represented as blocks, graphs, modules, packages, and extension ecosystems.
 
 The central problem this project tries to solve is the mismatch between modern game requirements and the traditional engine model. Many engines provide a fixed stack of rendering, physics, animation, scenes, scripting, gameplay, audio, AI, and networking systems. That model is useful for large production pipelines, but it can become too rigid for highly specialized games, experimental projects, and people who want to reconfigure engine architecture rather than fit game behavior into a preselected abstraction.
 
 The long-term vision is an engine architecture that lets developers choose the systems they need, arrange them as a block graph, inspect and validate the graph, and run the graph through analysis and optimization before execution. Major systems such as rendering, physics, animation, AI, gameplay, or audio can be represented as well-defined, reusable, and replaceable components. This is a move away from “one engine architecture for every project” and toward “a common engine core plus many architecture-building blocks.”
 
-That philosophy is inspired by the relationship between a code editor and its ecosystem. A shared core provides editing, workspace structure, extensibility, and interoperability. Around the core, a vivid ecosystem of extensions and packages can add specialized capabilities. Project Mosaic proposes a similar direction for game engines: a stable kernel, a block graph model, a formal or semi-formal Block Standard, and an ecosystem where developers can install, inspect, reuse, modify, and republish engine systems and libraries.
+That philosophy is inspired by the relationship between a code editor and its ecosystem. A shared core provides editing, workspace structure, extensibility, and interoperability. Around the core, a vivid ecosystem of extensions and packages can add specialized capabilities. Project Nysor proposes a similar direction for game engines: a stable kernel, a block graph model, a formal or semi-formal Block Standard, and an ecosystem where developers can install, inspect, reuse, modify, and republish engine systems and libraries.
 
 ## Goals
 

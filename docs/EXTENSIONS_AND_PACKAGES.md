@@ -1,6 +1,6 @@
-# Extensions and Packages
+﻿# Extensions and Packages
 
-Project Mosaic imagines an extension ecosystem in which developers can share and compose engine systems, blocks, libraries, tools, native code, and project examples. The project is not only about a block graph but also about a package and extension philosophy that can operate safely and transparently.
+Project Nysor imagines an extension ecosystem in which developers can share and compose engine systems, blocks, libraries, tools, native code, and project examples. The project is not only about a block graph but also about a package and extension philosophy that can operate safely and transparently.
 
 The long-term ecosystem is meant to support:
 

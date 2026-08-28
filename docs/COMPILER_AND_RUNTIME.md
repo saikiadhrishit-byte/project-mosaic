@@ -1,6 +1,6 @@
-# Compiler and Runtime
+﻿# Compiler and Runtime
 
-The long-term research direction for Project Mosaic is to convert block graphs into an intermediate representation and analyze that representation before deciding how to execute it. This is the key idea behind the block-graph execution model: make the graph readable to developers, but also transform it into a structure that can be validated, optimized, and scheduled.
+The long-term research direction for Project Nysor is to convert block graphs into an intermediate representation and analyze that representation before deciding how to execute it. This is the key idea behind the block-graph execution model: make the graph readable to developers, but also transform it into a structure that can be validated, optimized, and scheduled.
 
 A block graph should not be treated only as a list of visual blocks that are interpreted in a fixed order at runtime. Instead, the graph should be examined as a whole. The analysis might reveal dependency ordering, type compatibility, shared data access, opportunities for fusion, and other optimizations that are difficult to perceive from a single node.
 

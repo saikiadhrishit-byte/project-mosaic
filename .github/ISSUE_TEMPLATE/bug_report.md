@@ -1,4 +1,4 @@
----
+﻿---
 name: Bug report
 about: Report a documentation, formatting, repository, or process issue
 title: ""

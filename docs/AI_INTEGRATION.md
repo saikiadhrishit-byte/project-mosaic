@@ -1,4 +1,4 @@
-# AI Integration
+﻿# AI Integration
 
 Artificial intelligence may eventually participate in this engine architecture as an assistant, generator, explainer, adapter creator, and graph repair collaborator. However, the repository should clearly separate the role of AI from the deterministic execution path.
 

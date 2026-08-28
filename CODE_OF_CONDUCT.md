@@ -1,6 +1,6 @@
-# Contributor Code of Conduct
+﻿# Contributor Code of Conduct
 
-Project Mosaic is an open research and architecture repository. We value respectful technical discussion, constructive criticism, careful research, and honest documentation.
+Project Nysor is an open research and architecture repository. We value respectful technical discussion, constructive criticism, careful research, and honest documentation.
 
 ## Community Expectations
 

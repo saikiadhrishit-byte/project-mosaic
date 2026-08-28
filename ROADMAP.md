@@ -1,6 +1,6 @@
-# Roadmap
+﻿# Roadmap
 
-Project Mosaic is deliberately a design and research repository at the beginning of its lifecycle. The roadmap should be read as a staged research and engineering path rather than a promise of a complete engine.
+Project Nysor is deliberately a design and research repository at the beginning of its lifecycle. The roadmap should be read as a staged research and engineering path rather than a promise of a complete engine.
 
 ## Phase 0 — Research and Architecture
 

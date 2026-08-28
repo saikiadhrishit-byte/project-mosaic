@@ -1,4 +1,4 @@
----
+﻿---
 name: Architecture discussion
 about: Discuss a major design question or proposal for the engine architecture
 title: ""
