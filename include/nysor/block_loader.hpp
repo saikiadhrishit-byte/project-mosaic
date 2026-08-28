@@ -9,6 +9,8 @@
 
 namespace nysor {
 
+class PackageRegistry;
+
 struct PortDefinition {
   std::string name;
   std::string type;
@@ -64,6 +66,9 @@ ConnectionResult validate_connection(const BlockDefinition& source,
                                      const std::string& destination_port);
 GraphDefinition load_graph_definition(const std::filesystem::path& path);
 Graph build_graph(const GraphDefinition& definition,
+                  const std::filesystem::path& source_path = {});
+Graph build_graph(const GraphDefinition& definition,
+                  const PackageRegistry& registry,
                   const std::filesystem::path& source_path = {});
 Graph load_graph(const std::filesystem::path& path);
 

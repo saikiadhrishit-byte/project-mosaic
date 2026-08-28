@@ -32,7 +32,7 @@ target_link_libraries(nysor_example PRIVATE nysor)
 add_executable(nysor_core_test tests/core_pipeline.cpp)
 target_link_libraries(nysor_core_test PRIVATE nysor)
 
-add_library(nysor_loader STATIC src/block_loader.cpp)
+add_library(nysor_loader STATIC src/block_loader.cpp src/package.cpp)
 target_include_directories(nysor_loader PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_features(nysor_loader PUBLIC cxx_std_20)
 target_link_libraries(nysor_loader PUBLIC nysor nlohmann_json::nlohmann_json)
@@ -55,6 +55,12 @@ target_link_libraries(nysor_port_specification_test PRIVATE nysor_loader)
 add_executable(nysor_06_test tests/0.6/port_system.cpp)
 target_link_libraries(nysor_06_test PRIVATE nysor_loader)
 
+add_executable(nysor_package_test tests/package.cpp)
+target_link_libraries(nysor_package_test PRIVATE nysor_loader)
+
+add_executable(nysor_package_integration_test tests/package_integration.cpp)
+target_link_libraries(nysor_package_integration_test PRIVATE nysor_loader)
+
 enable_testing()
 add_test(NAME nysor_example COMMAND nysor_example)
 add_test(NAME nysor_core_test COMMAND nysor_core_test)
@@ -64,6 +70,8 @@ add_test(NAME nysor_external_block_pipeline_test COMMAND nysor_external_block_pi
 add_test(NAME nysor_graph_composition_test COMMAND nysor_graph_composition_test)
 add_test(NAME nysor_port_specification_test COMMAND nysor_port_specification_test)
 add_test(NAME nysor_06_test COMMAND nysor_06_test)
+add_test(NAME nysor_package_test COMMAND nysor_package_test)
+add_test(NAME nysor_package_integration_test COMMAND nysor_package_integration_test)
 
 if(NYSOR_BUILD_EDITOR)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable GLFW docs" FORCE)

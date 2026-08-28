@@ -1,4 +1,5 @@
 #include "nysor/block_loader.hpp"
+#include "nysor/package.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -269,8 +270,11 @@ GraphDefinition load_graph_definition(const std::filesystem::path& path) {
   return definition;
 }
 
-Graph build_graph(const GraphDefinition& definition,
-                  const std::filesystem::path& source_path) {
+namespace {
+
+Graph build_graph_impl(const GraphDefinition& definition,
+                       const std::filesystem::path& source_path,
+                       const PackageRegistry* registry) {
   const auto path = source_path.empty() ? std::filesystem::path("<graph>") : source_path;
   std::unordered_map<std::string, std::size_t> indices;
   for (std::size_t index = 0; index < definition.nodes.size(); ++index) {
@@ -287,8 +291,8 @@ Graph build_graph(const GraphDefinition& definition,
   for (std::size_t index = 0; index < definition.nodes.size(); ++index) {
     const auto& node = definition.nodes[index];
     if (node.block == "constant") continue;
-    const auto manifest_path = path.parent_path() / node.block;
-    const auto block = load_block(manifest_path);
+    const auto block = registry ? registry->get(node.block).block
+                  : load_block(path.parent_path() / node.block);
     if (node.inputs.size() != static_cast<std::size_t>(block.input_count)) {
       throw graph_error(path, "Node " + node.id + ": expected " +
                                    std::to_string(block.input_count) + " inputs, received " +
@@ -326,7 +330,8 @@ Graph build_graph(const GraphDefinition& definition,
                                      " is not an output port");
         }
       } else {
-        const auto source_block = load_block(path.parent_path() / source.block);
+        const auto source_block = registry ? registry->get(source.block).block
+                   : load_block(path.parent_path() / source.block);
         if (!find_port(source_block, PortDirection::Output, connection.port)) {
           throw graph_error(path, "Node " + connection.node + "." + connection.port +
                                      " is not an output port");
@@ -362,7 +367,8 @@ Graph build_graph(const GraphDefinition& definition,
       node_ids[node.id] = graph.add_constant(node.value);
       continue;
     }
-    const auto block = load_block(path.parent_path() / node.block);
+    const auto block = registry ? registry->get(node.block).block
+                  : load_block(path.parent_path() / node.block);
     const auto operation = parse_operation(block.operation);
     if (block.kind == "source") {
       node_ids[node.id] = graph.add_time(node.value);
@@ -377,6 +383,19 @@ Graph build_graph(const GraphDefinition& definition,
   }
   graph.add_output(node_ids.at(definition.output));
   return graph;
+}
+
+}  // namespace
+
+Graph build_graph(const GraphDefinition& definition,
+                  const std::filesystem::path& source_path) {
+  return build_graph_impl(definition, source_path, nullptr);
+}
+
+Graph build_graph(const GraphDefinition& definition,
+                  const PackageRegistry& registry,
+                  const std::filesystem::path& source_path) {
+  return build_graph_impl(definition, source_path, &registry);
 }
 
 Graph load_graph(const std::filesystem::path& path) {

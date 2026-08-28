@@ -18,6 +18,27 @@ The extension story is important because the engine is intended to be modular an
 
 ## Package Philosophy
 
+Nysor 0.7 introduces a minimal local package model. A package owns distribution
+metadata and points to one Block specification; the Block remains responsible
+for its ports and operation metadata. The initial package layout is:
+
+```text
+my-block/
+├── package.json
+├── block.json
+└── src/
+```
+
+`package.json` provides the stable package ID, version, publisher metadata, and
+dependency requirements. `block.json` is loaded through the existing Block
+manifest validator. `nysor::PackageRegistry` installs packages by ID, rejects
+duplicates, and checks that already-installed dependencies satisfy exact or
+caret requirements such as `^1.0.0`.
+
+This release intentionally does not include a marketplace, remote package
+discovery, native library loading, or a global dependency solver. Packages are
+local, inspectable units that can be validated before later graph integration.
+
 A package can be a portable collection of metadata and executable artifacts. It should likely include:
 
 - valid block definitions;
