@@ -1,4 +1,15 @@
-﻿# Architecture
+﻿## Nysor 0.7: Block Packages
+
+Nysor 0.7 adds a local package layer above Block specifications. A package
+                 -> Block Resolution -> External Graph -> Port Validation
+                 -> Dependency Analysis -> IR -> Runtime
+
+For example, a graph can request `core.math.add` without knowing where its
+`block.json` file is stored. `PackageRegistry` rejects duplicate IDs, missing
+dependencies, and incompatible exact or caret version requirements. Existing
+path-based graph loading remains supported for compatibility with the earlier
+prototype releases.
+# Architecture
 
 Project Nysor is an experimental architecture for composing software systems. The repository documents both a small working prototype and a broader architecture direction; they must not be treated as the same thing.
 

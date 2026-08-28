@@ -1,4 +1,18 @@
-﻿# Roadmap
+﻿## Nysor 0.7 — Block Packages
+
+The 0.7 milestone establishes the first local package ecosystem. Packages are
+portable, inspectable units that separate distribution metadata from the Block
+specification and implementation details. The package registry provides stable
+identity-based Block resolution, duplicate-ID protection, and simple dependency
+compatibility checks. The verified pipeline is:
+
+```text
+Package -> Registry -> Block Resolution -> Graph -> IR -> Runtime
+```
+
+This milestone intentionally excludes remote discovery, marketplaces, native
+library loading, and global dependency solving.
+# Roadmap
 
 Project Nysor is deliberately a design and research repository at the beginning of its lifecycle. The roadmap should be read as a staged research and engineering path rather than a promise of a complete engine.
 
