@@ -120,9 +120,9 @@ Project Nysor is an experimental architecture and research project. It is not a 
 4. gathering references to related technologies;
 5. creating a roadmap for proof-of-concept prototypes.
 
-## Current Milestone: Nysor 0.6 (Prototype Release)
+## Current Milestone: Nysor 0.7 (Block Packages)
 
-Nysor 0.6 is a milestone release of the experimental prototype. The architecture remains experimental and open to developer feedback. Nysor now supports:
+Nysor 0.7 is a milestone release of the experimental prototype. The architecture remains experimental and open to developer feedback. Nysor now supports:
 
 - External Block definitions
 - External graph composition
@@ -134,6 +134,10 @@ Nysor 0.6 is a milestone release of the experimental prototype. The architecture
 - Parallel execution
 - Visual graph editing
 - Build diagnostics
+- Local Block packages
+- Package registry resolution by stable ID
+- Package dependency and version validation
+- Package-to-graph-to-runtime integration
 
 See the [Nysor architecture documentation](docs/architecture.md) for the current implementation boundary, architecture direction, and open problems.
 

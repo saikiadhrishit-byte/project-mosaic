@@ -73,6 +73,39 @@ add_test(NAME nysor_06_test COMMAND nysor_06_test)
 add_test(NAME nysor_package_test COMMAND nysor_package_test)
 add_test(NAME nysor_package_integration_test COMMAND nysor_package_integration_test)
 
+add_custom_target(check
+    COMMAND ${CMAKE_CTEST_COMMAND} --test-dir ${CMAKE_BINARY_DIR} --output-on-failure
+    DEPENDS
+        nysor_example
+        nysor_core_test
+        nysor_block_loader_test
+        nysor_block_validation_test
+        nysor_external_block_pipeline_test
+        nysor_graph_composition_test
+        nysor_port_specification_test
+        nysor_06_test
+        nysor_package_test
+        nysor_package_integration_test
+    USES_TERMINAL
+)
+
+if(WIN32)
+    get_filename_component(NYSOR_COMPILER_RUNTIME_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+    set_tests_properties(
+        nysor_example
+        nysor_core_test
+        nysor_block_loader_test
+        nysor_block_validation_test
+        nysor_external_block_pipeline_test
+        nysor_graph_composition_test
+        nysor_port_specification_test
+        nysor_06_test
+        nysor_package_test
+        nysor_package_integration_test
+        PROPERTIES ENVIRONMENT "PATH=${NYSOR_COMPILER_RUNTIME_DIR};$ENV{PATH}"
+    )
+endif()
+
 if(NYSOR_BUILD_EDITOR)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable GLFW docs" FORCE)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "Disable GLFW tests" FORCE)

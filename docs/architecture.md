@@ -1,15 +1,4 @@
-﻿## Nysor 0.7: Block Packages
-
-Nysor 0.7 adds a local package layer above Block specifications. A package
-                 -> Block Resolution -> External Graph -> Port Validation
-                 -> Dependency Analysis -> IR -> Runtime
-
-For example, a graph can request `core.math.add` without knowing where its
-`block.json` file is stored. `PackageRegistry` rejects duplicate IDs, missing
-dependencies, and incompatible exact or caret version requirements. Existing
-path-based graph loading remains supported for compatibility with the earlier
-prototype releases.
-# Architecture
+﻿# Architecture
 
 Project Nysor is an experimental architecture for composing software systems. The repository documents both a small working prototype and a broader architecture direction; they must not be treated as the same thing.
 
@@ -43,7 +32,26 @@ Blocks -> Block Graph -> Validation -> Dependency Analysis
     -> Taskflow Runtime
 ```
 
-It supports `Input`, `Constant`, binary arithmetic, and `Output` nodes. It validates arity, references, graph closure, constant division by zero, and cycles; lowers valid graphs into a small IR; identifies dependency edges and levels; and executes through Taskflow. The JSON loader validates arithmetic Block manifests and builds graph compositions from external definitions, including forward references resolved through a topological order before the append-only core graph is constructed. Tests also measure concurrency and synchronization. A general type system, optimization passes, GPU backends, and package system are not implemented.
+It supports `Input`, `Constant`, binary arithmetic, and `Output` nodes. It validates arity, references, graph closure, constant division by zero, and cycles; lowers valid graphs into a small IR; identifies dependency edges and levels; and executes through Taskflow. The JSON loader validates arithmetic Block manifests and builds graph compositions from external definitions, including forward references resolved through a topological order before the append-only core graph is constructed. Tests also measure concurrency and synchronization. A general type system, optimization passes, and GPU backends remain future work.
+
+## Nysor 0.7: Block Packages
+
+Nysor 0.7 adds a local package layer above Block specifications. A package
+contains metadata, a stable package ID, dependency requirements, and a
+reference to its Block manifest. The registry resolves graph Blocks by package
+identity rather than by implementation path:
+
+```text
+External Package -> Package Manifest -> Package Registry
+                 -> Block Resolution -> External Graph -> Port Validation
+                 -> Dependency Analysis -> IR -> Runtime
+```
+
+For example, a graph can request `core.math.add` without knowing where its
+`block.json` file is stored. `PackageRegistry` rejects duplicate IDs, missing
+dependencies, and incompatible exact or caret version requirements. Existing
+path-based graph loading remains supported for compatibility with the earlier
+prototype releases.
 
 ## External Graph Composition
 
