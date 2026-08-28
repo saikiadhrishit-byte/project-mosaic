@@ -92,6 +92,26 @@ The documentation in this repository is meant to communicate the early architect
 
 ## Status
 
+## Verification
+
+Build and verify the complete Nysor prototype:
+
+```powershell
+cmake -S . -B build
+cmake --build build
+cmake --build build --target check
+```
+
+The `check` target builds all test executables and runs the complete CTest
+suite with failure output enabled. A Nysor release is valid only when the full
+build succeeds and the `check` target passes.
+
+The equivalent explicit test command is:
+
+```powershell
+ctest --test-dir build --output-on-failure
+```
+
 Project Nysor is an experimental architecture and research project. It is not a completed engine and should not be treated as one. This repository focuses on:
 
 1. communicating the vision;
