@@ -14,6 +14,7 @@ class PackageRegistry;
 struct PortDefinition {
   std::string name;
   std::string type;
+  std::string specification;
 };
 
 enum class PortDirection {

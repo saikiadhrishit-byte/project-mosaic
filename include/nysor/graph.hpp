@@ -19,6 +19,9 @@ enum class BlockKind {
   Multiply,
   Divide,
   Sine,
+  Event,
+  State,
+  Print,
   Output,
 };
 
@@ -46,6 +49,7 @@ class Graph {
   NodeId add_binary(BlockKind kind, NodeId left, NodeId right) {
     if (kind != BlockKind::Add && kind != BlockKind::Subtract &&
         kind != BlockKind::Multiply && kind != BlockKind::Divide) {
+      if (kind == BlockKind::State) return add_node(kind, {left, right});
       throw std::invalid_argument("add_binary requires an arithmetic block");
     }
     return add_node(kind, {left, right});
@@ -56,7 +60,8 @@ class Graph {
   }
 
   NodeId add_unary(BlockKind kind, NodeId input) {
-    if (kind != BlockKind::Sine) {
+    if (kind != BlockKind::Sine && kind != BlockKind::Event &&
+      kind != BlockKind::Print) {
       throw std::invalid_argument("add_unary requires a supported unary block");
     }
     return add_node(kind, {input});

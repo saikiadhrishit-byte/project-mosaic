@@ -67,8 +67,9 @@ std::vector<PortDefinition> parse_ports(const Json& json,
   std::vector<PortDefinition> ports;
   for (const auto& port : json[field]) {
     if (!port.is_object() || !port.contains("name") || !port["name"].is_string() ||
-        !port.contains("type") || !port["type"].is_string()) {
-      throw manifest_error(path, field, "Each port requires a name and type");
+        ((!port.contains("type") || !port["type"].is_string()) &&
+         (!port.contains("specification") || !port["specification"].is_string()))) {
+      throw manifest_error(path, field, "Each port requires a name and type or specification");
     }
     const auto name = port["name"].get<std::string>();
     if (std::any_of(ports.begin(), ports.end(),
@@ -77,7 +78,10 @@ std::vector<PortDefinition> parse_ports(const Json& json,
                     })) {
       throw manifest_error(path, field, "Duplicate port name: " + name);
     }
-    ports.push_back({name, port["type"].get<std::string>()});
+    const auto specification = port.contains("specification")
+                     ? port["specification"].get<std::string>()
+                     : port["type"].get<std::string>();
+    ports.push_back({name, specification, specification});
   }
   return ports;
 }
@@ -91,8 +95,11 @@ BlockKind parse_operation(const std::string& operation) {
   if (operation == "divide") return BlockKind::Divide;
   if (operation == "sine") return BlockKind::Sine;
   if (operation == "time") return BlockKind::Time;
+  if (operation == "event") return BlockKind::Event;
+  if (operation == "state") return BlockKind::State;
+  if (operation == "print") return BlockKind::Print;
   throw std::invalid_argument("Unsupported operation: " + operation +
-                              ". Supported operations: add, subtract, multiply, divide, sine");
+                              ". Supported operations: add, subtract, multiply, divide, sine, time, event, state, print");
 }
 
 BlockDefinition load_block(const std::filesystem::path& path) {
@@ -115,8 +122,8 @@ BlockDefinition load_block(const std::filesystem::path& path) {
     definition.output_count = required_count(json, path, "outputs");
   }
 
-  if (definition.kind != "binary" && definition.kind != "unary" &&
-      definition.kind != "source") {
+    if (definition.kind != "binary" && definition.kind != "unary" &&
+      definition.kind != "source" && definition.kind != "state") {
     throw manifest_error(path, "kind", "Unsupported kind: " + definition.kind);
   }
   try {
@@ -124,10 +131,10 @@ BlockDefinition load_block(const std::filesystem::path& path) {
   } catch (const std::invalid_argument& error) {
     throw manifest_error(path, "operation", error.what());
   }
-  const int expected_inputs = definition.kind == "binary" ? 2 :
+  const int expected_inputs = (definition.kind == "binary" || definition.kind == "state") ? 2 :
                               definition.kind == "unary" ? 1 : 0;
   if (definition.input_count != expected_inputs) {
-    if (definition.kind == "binary") {
+    if (definition.kind == "binary" || definition.kind == "state") {
       throw manifest_error(path, "inputs", "Binary blocks require exactly 2 inputs");
     } else if (definition.kind == "unary") {
       throw manifest_error(path, "inputs", "Unary blocks require exactly 1 input");
@@ -140,13 +147,13 @@ BlockDefinition load_block(const std::filesystem::path& path) {
   }
   if (definition.input_ports.empty()) {
     definition.input_ports = definition.kind == "binary"
-                                 ? std::vector<PortDefinition>{{"left", "number"},
-                                                               {"right", "number"}}
-                                 : std::vector<PortDefinition>{{"input", "number"}};
+                                 ? std::vector<PortDefinition>{{"left", "number", "number"},
+                                                               {"right", "number", "number"}}
+                                 : std::vector<PortDefinition>{{"input", "number", "number"}};
     if (definition.kind == "source") definition.input_ports.clear();
   }
   if (definition.output_ports.empty()) {
-    definition.output_ports = {{"result", "number"}};
+    definition.output_ports = {{"result", "number", "number"}};
   }
   for (const auto& input : definition.input_ports) {
     if (std::any_of(definition.output_ports.begin(), definition.output_ports.end(),
@@ -182,9 +189,11 @@ ConnectionResult validate_connection(const BlockDefinition& source,
   if (!input) {
     return {false, destination.name + "." + destination_port + " is not an input port"};
   }
-  if (output->type != input->type) {
-    return {false, source.name + "." + source_port + " (" + output->type + ") is incompatible with " +
-                   destination.name + "." + destination_port + " (" + input->type + ")"};
+  const auto& output_specification = output->specification.empty() ? output->type : output->specification;
+  const auto& input_specification = input->specification.empty() ? input->type : input->specification;
+  if (output_specification != input_specification) {
+    return {false, source.name + "." + source_port + " (" + output_specification + ") is incompatible with " +
+                   destination.name + "." + destination_port + " (" + input_specification + ")"};
   }
   return {true, {}};
 }
@@ -306,17 +315,17 @@ Graph build_graph_impl(const GraphDefinition& definition,
       if (port == block.input_ports.end()) {
         throw graph_error(path, "Node " + node.id + " references unknown input port: " + name);
       }
-      if (port->type != "number" && port->type != "core.number") {
-        throw graph_error(path, "Node " + node.id + " input port " + name +
-                                   " has unsupported type: " + port->type);
-      }
     }
     if (block.kind == "binary" &&
         (!node.inputs.contains("left") || !node.inputs.contains("right"))) {
       throw graph_error(path, "Node " + node.id + " requires left and right inputs");
     }
-    if (block.kind == "unary" && !node.inputs.contains("input")) {
-      throw graph_error(path, "Node " + node.id + " requires an input connection");
+    if (block.kind == "state" &&
+        (!node.inputs.contains("set") || !node.inputs.contains("trigger"))) {
+      throw graph_error(path, "Node " + node.id + " requires set and trigger inputs");
+    }
+    if (block.kind == "unary" && node.inputs.size() != 1) {
+      throw graph_error(path, "Node " + node.id + " requires one input connection");
     }
     for (const auto& [name, connection] : node.inputs) {
       if (!indices.contains(connection.node)) {
@@ -332,9 +341,15 @@ Graph build_graph_impl(const GraphDefinition& definition,
       } else {
         const auto source_block = registry ? registry->get(source.block).block
                    : load_block(path.parent_path() / source.block);
-        if (!find_port(source_block, PortDirection::Output, connection.port)) {
+        const auto* source_port = find_port(source_block, PortDirection::Output, connection.port);
+        if (!source_port) {
           throw graph_error(path, "Node " + connection.node + "." + connection.port +
                                      " is not an output port");
+        }
+        const auto* destination_port = find_port(block, PortDirection::Input, name);
+        if (!destination_port || source_port->specification != destination_port->specification) {
+          throw graph_error(path, "Node " + connection.node + "." + connection.port +
+                                     " is incompatible with " + node.id + "." + name);
         }
       }
       const auto dependency = indices.at(connection.node);
@@ -373,8 +388,13 @@ Graph build_graph_impl(const GraphDefinition& definition,
     if (block.kind == "source") {
       node_ids[node.id] = graph.add_time(node.value);
     } else if (block.kind == "unary") {
+      const auto& input = node.inputs.begin()->second;
       node_ids[node.id] = graph.add_unary(operation,
-                                          node_ids.at(node.inputs.at("input").node));
+                                          node_ids.at(input.node));
+    } else if (block.kind == "state") {
+      node_ids[node.id] = graph.add_binary(operation,
+                                           node_ids.at(node.inputs.at("set").node),
+                                           node_ids.at(node.inputs.at("trigger").node));
     } else {
       node_ids[node.id] = graph.add_binary(operation,
                                            node_ids.at(node.inputs.at("left").node),

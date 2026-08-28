@@ -61,6 +61,18 @@ target_link_libraries(nysor_package_test PRIVATE nysor_loader)
 add_executable(nysor_package_integration_test tests/package_integration.cpp)
 target_link_libraries(nysor_package_integration_test PRIVATE nysor_loader)
 
+add_executable(nysor_08_heterogeneous_blocks_test tests/0.8/heterogeneous_blocks.cpp)
+target_link_libraries(nysor_08_heterogeneous_blocks_test PRIVATE nysor_loader)
+
+add_executable(nysor_08_specification_compatibility_test tests/0.8/specification_compatibility.cpp)
+target_link_libraries(nysor_08_specification_compatibility_test PRIVATE nysor_loader)
+
+add_executable(nysor_08_event_pipeline_test tests/0.8/event_pipeline.cpp)
+target_link_libraries(nysor_08_event_pipeline_test PRIVATE nysor_loader)
+
+add_executable(nysor_08_heterogeneous_integration_test tests/0.8/heterogeneous_integration.cpp)
+target_link_libraries(nysor_08_heterogeneous_integration_test PRIVATE nysor_loader)
+
 enable_testing()
 add_test(NAME nysor_example COMMAND nysor_example)
 add_test(NAME nysor_core_test COMMAND nysor_core_test)
@@ -72,6 +84,10 @@ add_test(NAME nysor_port_specification_test COMMAND nysor_port_specification_tes
 add_test(NAME nysor_06_test COMMAND nysor_06_test)
 add_test(NAME nysor_package_test COMMAND nysor_package_test)
 add_test(NAME nysor_package_integration_test COMMAND nysor_package_integration_test)
+add_test(NAME nysor_08_heterogeneous_blocks_test COMMAND nysor_08_heterogeneous_blocks_test)
+add_test(NAME nysor_08_specification_compatibility_test COMMAND nysor_08_specification_compatibility_test)
+add_test(NAME nysor_08_event_pipeline_test COMMAND nysor_08_event_pipeline_test)
+add_test(NAME nysor_08_heterogeneous_integration_test COMMAND nysor_08_heterogeneous_integration_test)
 
 add_custom_target(check
     COMMAND ${CMAKE_CTEST_COMMAND} --test-dir ${CMAKE_BINARY_DIR} --output-on-failure
@@ -86,6 +102,10 @@ add_custom_target(check
         nysor_06_test
         nysor_package_test
         nysor_package_integration_test
+        nysor_08_heterogeneous_blocks_test
+        nysor_08_specification_compatibility_test
+        nysor_08_event_pipeline_test
+        nysor_08_heterogeneous_integration_test
     USES_TERMINAL
 )
 
@@ -102,6 +122,10 @@ if(WIN32)
         nysor_06_test
         nysor_package_test
         nysor_package_integration_test
+        nysor_08_heterogeneous_blocks_test
+        nysor_08_specification_compatibility_test
+        nysor_08_event_pipeline_test
+        nysor_08_heterogeneous_integration_test
         PROPERTIES ENVIRONMENT "PATH=${NYSOR_COMPILER_RUNTIME_DIR};$ENV{PATH}"
     )
 endif()

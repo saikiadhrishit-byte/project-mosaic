@@ -53,6 +53,24 @@ dependencies, and incompatible exact or caret version requirements. Existing
 path-based graph loading remains supported for compatibility with the earlier
 prototype releases.
 
+## Nysor 0.8: Heterogeneous Blocks
+
+The 0.8 prototype proves that the package and graph architecture is not limited
+to arithmetic. Blocks may expose named specifications such as `core.event` or
+`core.value`; compatible ports connect directly even when their implementations
+come from independent packages. The initial runtime semantics are intentionally
+small: Time produces a value, Event forwards its trigger, State stores its set
+value, and Print forwards its input.
+
+```text
+Package -> Block -> Specifications -> Compatibility
+    -> Graph -> IR -> Runtime
+```
+
+The test suite covers a `Timer -> Event -> State -> Print` pipeline and two
+independent packages that communicate only through `core.event`. Adapters and
+dissolvers remain deferred to a later milestone.
+
 ## External Graph Composition
 
 Nysor 0.5 adds a small composition format with node IDs, Block manifest paths,

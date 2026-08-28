@@ -12,6 +12,14 @@ Package -> Registry -> Block Resolution -> Graph -> IR -> Runtime
 
 This milestone intentionally excludes remote discovery, marketplaces, native
 library loading, and global dependency solving.
+
+## Nysor 0.8 — Heterogeneous Blocks
+
+The 0.8 milestone extends package resolution beyond arithmetic operations.
+Blocks can declare named specifications such as `core.event` and compose
+through compatible ports without the core knowing their domain semantics. The
+initial proof uses Time, Event, State, and Print Blocks with deliberately small
+runtime behavior. Adapters and dissolvers remain deferred.
 # Roadmap
 
 Project Nysor is deliberately a design and research repository at the beginning of its lifecycle. The roadmap should be read as a staged research and engineering path rather than a promise of a complete engine.

@@ -30,7 +30,8 @@ inline ValidationResult validate(const Graph& graph) {
     const std::size_t expected_inputs =
         (node.kind == BlockKind::Input || node.kind == BlockKind::Constant ||
          node.kind == BlockKind::Time) ? 0 :
-        (node.kind == BlockKind::Output || node.kind == BlockKind::Sine) ? 1 : 2;
+        (node.kind == BlockKind::Output || node.kind == BlockKind::Sine ||
+         node.kind == BlockKind::Event || node.kind == BlockKind::Print) ? 1 : 2;
     if (node.inputs.size() != expected_inputs) {
       result.errors.push_back("node " + std::to_string(node.id) +
                               " has the wrong number of inputs");
@@ -173,6 +174,18 @@ inline TaskflowExecution execute_with_taskflow_timed(
         case BlockKind::Sine:
           values[id] = std::sin(values[instruction.inputs[0]]);
           break;
+        case BlockKind::Time:
+          values[id] = instruction.constant_value;
+          break;
+        case BlockKind::Event:
+          values[id] = values[instruction.inputs[0]];
+          break;
+        case BlockKind::State:
+          values[id] = values[instruction.inputs[0]];
+          break;
+        case BlockKind::Print:
+          values[id] = values[instruction.inputs[0]];
+          break;
       }
           timings[id].completed_us = std::chrono::duration_cast<std::chrono::microseconds>(
           std::chrono::steady_clock::now() - start).count();
@@ -269,6 +282,10 @@ inline std::string dump_ir(const IR& ir) {
       case BlockKind::Divide: output << "DIVIDE"; break;
       case BlockKind::Output: output << "OUTPUT"; break;
       case BlockKind::Sine: output << "SINE"; break;
+      case BlockKind::Time: output << "TIME"; break;
+      case BlockKind::Event: output << "EVENT"; break;
+      case BlockKind::State: output << "STATE"; break;
+      case BlockKind::Print: output << "PRINT"; break;
     }
     output << '\n';
   }
