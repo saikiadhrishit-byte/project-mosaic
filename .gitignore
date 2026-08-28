@@ -1,0 +1,11 @@
+# CMake build directories
+build/
+bin/
+lib/
+out/
+
+# Editor / IDE directories
+.vscode/
+.idea/
+*.swp
+*.user

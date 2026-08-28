@@ -13,10 +13,12 @@ using NodeId = std::size_t;
 enum class BlockKind {
   Input,
   Constant,
+  Time,
   Add,
   Subtract,
   Multiply,
   Divide,
+  Sine,
   Output,
 };
 
@@ -37,6 +39,10 @@ class Graph {
     return add_node(BlockKind::Constant, {}, value);
   }
 
+  NodeId add_time(double value) {
+    return add_node(BlockKind::Time, {}, value);
+  }
+
   NodeId add_binary(BlockKind kind, NodeId left, NodeId right) {
     if (kind != BlockKind::Add && kind != BlockKind::Subtract &&
         kind != BlockKind::Multiply && kind != BlockKind::Divide) {
@@ -47,6 +53,13 @@ class Graph {
 
   NodeId add_output(NodeId input) {
     return add_node(BlockKind::Output, {input});
+  }
+
+  NodeId add_unary(BlockKind kind, NodeId input) {
+    if (kind != BlockKind::Sine) {
+      throw std::invalid_argument("add_unary requires a supported unary block");
+    }
+    return add_node(kind, {input});
   }
 
   const std::vector<Node>& nodes() const { return nodes_; }

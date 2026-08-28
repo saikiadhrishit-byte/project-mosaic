@@ -1,4 +1,4 @@
-﻿# Project Nysor
+# Project Nysor
 
 Project Nysor is an experimental open-source game-engine architecture project exploring a different kind of engine foundation: a small, stable kernel with a large ecosystem of replaceable, composable, and inspectable systems.
 
@@ -99,6 +99,24 @@ Project Nysor is an experimental architecture and research project. It is not a 
 3. drafting an initial Block Standard;
 4. gathering references to related technologies;
 5. creating a roadmap for proof-of-concept prototypes.
+
+## Current Milestone: Nysor 0.6 (Prototype Release)
+
+Nysor 0.6 is a milestone release of the experimental prototype. The architecture remains experimental and open to developer feedback. Nysor now supports:
+
+- External Block definitions
+- External graph composition
+- Explicit input/output ports
+- Block specifications
+- Port compatibility validation
+- Dependency analysis
+- Topological compilation
+- Parallel execution
+- Visual graph editing
+- Build diagnostics
+
+See the [Nysor architecture documentation](docs/architecture.md) for the current implementation boundary, architecture direction, and open problems.
+
 
 ## Roadmap
 

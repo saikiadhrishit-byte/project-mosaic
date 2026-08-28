@@ -24,6 +24,12 @@ int main() {
     expect(block.operation == "add", "wrong operation");
     expect(block.input_count == 2, "wrong input count");
     expect(block.output_count == 1, "wrong output count");
+    expect(block.input_ports[0].name == "left" &&
+           block.input_ports[1].name == "right",
+         "wrong input port names");
+    expect(block.output_ports[0].name == "result" &&
+           block.output_ports[0].type == "number",
+         "wrong output port specification");
     std::cout << "Valid block loading: PASS\n";
     return 0;
   } catch (const std::exception& error) {

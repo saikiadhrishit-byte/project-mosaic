@@ -1,0 +1,8 @@
+{
+  "version": "0.1",
+  "nodes": [
+    {"id": "output", "block": "../signals/sine.json", "inputs": {"input": {"node": "time", "port": "result"}}},
+    {"id": "time", "type": "source", "block": "../signals/time.json", "value": 0.0}
+  ],
+  "output": "output"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "time",
+  "version": "0.1.0",
+  "kind": "source",
+  "operation": "time",
+  "inputs": [],
+  "outputs": [{"name": "result", "type": "core.number"}]
+}

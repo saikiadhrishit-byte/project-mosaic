@@ -36,6 +36,22 @@ int main() {
            "result was not resolved after sum and multiplier");
     expect(nysor::execute(ir) == 30.0, "composed graph result was not 30");
 
+    try {
+      nysor::load_graph(root() / "tests/data/invalid_port_graph.json");
+      throw std::runtime_error("unknown port was accepted");
+    } catch (const std::runtime_error& error) {
+      expect(std::string(error.what()).find("unknown input port: middle") !=
+                 std::string::npos,
+             "unknown port error was not reported");
+    }
+    try {
+      nysor::load_graph(root() / "tests/data/invalid_output_port_graph.json");
+      throw std::runtime_error("unknown output port was accepted");
+    } catch (const std::runtime_error& error) {
+      expect(std::string(error.what()).find("a.wrong") != std::string::npos,
+             "unknown output port error was not reported");
+    }
+
     std::cout << "=== Nysor 0.5 External Graph Composition ===\n"
               << "Nodes discovered: 5\n"
               << "Resolving dependencies...\n"

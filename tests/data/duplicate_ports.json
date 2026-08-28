@@ -1,0 +1,10 @@
+{
+  "name": "duplicate",
+  "version": "0.1.0",
+  "operation": "add",
+  "inputs": [
+    {"name": "position", "type": "game.vector3"},
+    {"name": "position", "type": "game.vector3"}
+  ],
+  "outputs": [{"name": "result", "type": "core.number"}]
+}

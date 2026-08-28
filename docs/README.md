@@ -8,6 +8,7 @@ Nysor is an experimental architecture for composing software systems from reusab
 - [Architecture](architecture.md): The compiler, graph, IR, and runtime pipeline.
 - [From Prototype to Nysor](architecture.md#from-prototype-to-nysor): Why the prototype uses arithmetic graphs.
 - [Block Model](block-model.md): The conceptual Block and manifest model.
+- [Ports and Specifications](block-model.md#ports-and-specifications): Named ports and external Block contracts.
 - [Compatibility](compatibility.md): Specifications, connectors, adapters, and Dissolvers.
 - [Testing and Benchmarks](testing-and-benchmarks.md): How compatibility and performance should be demonstrated.
 - [Ecosystem](ecosystem.md): Publishers, ecosystems, flavours, and distribution.

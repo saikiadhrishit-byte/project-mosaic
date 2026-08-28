@@ -18,6 +18,9 @@ The repository currently tests:
 - valid and invalid JSON Block manifests;
 - external graph composition loaded from `examples/graphs/simple.json`.
 - out-of-order external graph composition from `examples/graphs/arithmetic_demo.json`.
+- the non-arithmetic external `Time -> Sine -> Output` composition.
+- the focused `tests/0.6/` port-system suite, including direction, type,
+  duplicate-port, cycle, large-graph, and forward-reference cases.
 
 The test suite also measures peak concurrency and task timing. It currently demonstrates that independent tasks can run concurrently and that dependent tasks start only after prerequisite completion.
 

@@ -1,0 +1,8 @@
+{
+  "name": "sine",
+  "version": "0.1.0",
+  "kind": "unary",
+  "operation": "sine",
+  "inputs": [{"name": "input", "type": "core.number"}],
+  "outputs": [{"name": "result", "type": "core.number"}]
+}

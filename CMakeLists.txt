@@ -49,6 +49,12 @@ target_link_libraries(nysor_external_block_pipeline_test PRIVATE nysor_loader)
 add_executable(nysor_graph_composition_test tests/graph_composition.cpp)
 target_link_libraries(nysor_graph_composition_test PRIVATE nysor_loader)
 
+add_executable(nysor_port_specification_test tests/port_specification.cpp)
+target_link_libraries(nysor_port_specification_test PRIVATE nysor_loader)
+
+add_executable(nysor_06_test tests/0.6/port_system.cpp)
+target_link_libraries(nysor_06_test PRIVATE nysor_loader)
+
 enable_testing()
 add_test(NAME nysor_example COMMAND nysor_example)
 add_test(NAME nysor_core_test COMMAND nysor_core_test)
@@ -56,6 +62,8 @@ add_test(NAME nysor_block_loader_test COMMAND nysor_block_loader_test)
 add_test(NAME nysor_block_validation_test COMMAND nysor_block_validation_test)
 add_test(NAME nysor_external_block_pipeline_test COMMAND nysor_external_block_pipeline_test)
 add_test(NAME nysor_graph_composition_test COMMAND nysor_graph_composition_test)
+add_test(NAME nysor_port_specification_test COMMAND nysor_port_specification_test)
+add_test(NAME nysor_06_test COMMAND nysor_06_test)
 
 if(NYSOR_BUILD_EDITOR)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable GLFW docs" FORCE)

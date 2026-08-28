@@ -49,6 +49,26 @@ prototype accepts nodes in an arbitrary order, resolves their dependencies,
 and only then calls the existing `Graph` API. This is current prototype
 behavior for arithmetic Blocks, not a finalized project or package format.
 
+## Nysor 0.6: Ports and Specifications
+
+External arithmetic manifests now declare named typed ports such as `left`,
+`right`, and `result`. Graph composition validates that connections use ports
+declared by the referenced Block specification before building the existing
+positional core Graph.
+
+```text
+Add.result -> Multiply.left
+```
+
+This is the first structural step beyond anonymous node-to-node dependencies.
+The current implementation supports numeric arithmetic ports; richer type
+systems and domain-specific specifications remain future work.
+
+The 0.6 test suite also includes the first non-arithmetic external composition:
+`Time -> Sine -> Output`. `Time` is a minimal source Block and `Sine` is a
+minimal unary signal Block. This is an architectural experiment, not yet a
+general-purpose non-arithmetic Block ecosystem.
+
 ## From Prototype to Nysor
 
 The current prototype uses arithmetic nodes as the smallest experiment for

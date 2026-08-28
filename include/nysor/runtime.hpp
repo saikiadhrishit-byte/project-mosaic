@@ -6,6 +6,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <cmath>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -27,8 +28,9 @@ inline ValidationResult validate(const Graph& graph) {
 
   for (const auto& node : nodes) {
     const std::size_t expected_inputs =
-        (node.kind == BlockKind::Input || node.kind == BlockKind::Constant) ? 0 :
-        node.kind == BlockKind::Output ? 1 : 2;
+        (node.kind == BlockKind::Input || node.kind == BlockKind::Constant ||
+         node.kind == BlockKind::Time) ? 0 :
+        (node.kind == BlockKind::Output || node.kind == BlockKind::Sine) ? 1 : 2;
     if (node.inputs.size() != expected_inputs) {
       result.errors.push_back("node " + std::to_string(node.id) +
                               " has the wrong number of inputs");
@@ -168,6 +170,9 @@ inline TaskflowExecution execute_with_taskflow_timed(
         case BlockKind::Output:
           values[id] = values[instruction.inputs[0]];
           break;
+        case BlockKind::Sine:
+          values[id] = std::sin(values[instruction.inputs[0]]);
+          break;
       }
           timings[id].completed_us = std::chrono::duration_cast<std::chrono::microseconds>(
           std::chrono::steady_clock::now() - start).count();
@@ -263,6 +268,7 @@ inline std::string dump_ir(const IR& ir) {
       case BlockKind::Multiply: output << "MULTIPLY"; break;
       case BlockKind::Divide: output << "DIVIDE"; break;
       case BlockKind::Output: output << "OUTPUT"; break;
+      case BlockKind::Sine: output << "SINE"; break;
     }
     output << '\n';
   }

@@ -51,7 +51,39 @@ The exact identity rules, type syntax, dependency format, implementation loading
 
 The current loader supports the minimal manifest fields shown above for binary arithmetic Blocks. It maps `operation` values such as `add` and `multiply` to the internal C++ `BlockKind` without exposing C++ names in JSON. An external graph definition can reference constants and manifest paths, and the loader builds the equivalent Nysor `Graph` for the existing compiler and runtime.
 
-The supported external operations are currently `add`, `subtract`, `multiply`, and `divide`. Inputs are positional node references. This is intentionally a small experiment, not a finalized package or manifest system.
+The supported external operations are currently `add`, `subtract`, `multiply`, `divide`, `sine`, and `time`. Inputs are positional node references. This is intentionally a small experiment, not a finalized package or manifest system.
+
+## Ports and Specifications
+
+The current manifest loader supports explicit port specifications. A binary
+arithmetic Block can declare named numeric inputs and outputs:
+
+```json
+{
+  "inputs": [
+    {"name": "left", "type": "number"},
+    {"name": "right", "type": "number"}
+  ],
+  "outputs": [
+    {"name": "result", "type": "number"}
+  ]
+}
+```
+
+During external graph composition, Nysor checks that each named connection is
+declared by the Block manifest. Unknown ports are rejected before the existing
+compiler receives the graph. This is current prototype behavior for numeric
+arithmetic; the manifest format and general type model remain experimental.
+
+Graph connections may explicitly identify both endpoints:
+
+```json
+{"left": {"node": "sum", "port": "result"}}
+```
+
+The older string form, such as `"left": "sum"`, remains supported as shorthand
+for the `result` output port. The loader validates source output direction and
+destination input names before compilation.
 
 ## External Composition
 
@@ -61,6 +93,12 @@ referenced node appears in the file; the loader resolves all names and
 topologically orders the result before constructing the existing core Graph.
 The example in `examples/graphs/arithmetic_demo.json` intentionally places
 `result` before its dependencies and still evaluates to `30`.
+
+The first non-arithmetic experiment is `Time -> Sine -> Output`, defined by
+`examples/signals/time.json`, `examples/signals/sine.json`, and
+`examples/graphs/sine_demo.json`. It demonstrates that the external Block
+pipeline is not limited to binary arithmetic, while remaining deliberately
+small.
 
 ## Composite Blocks
 
