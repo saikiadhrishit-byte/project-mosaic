@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 import os
 import sys
 import json
@@ -185,7 +185,7 @@ def main():
         print(f"Error: Could not find issue list at {issues_path}", file=sys.stderr)
         sys.exit(1)
         
-    with open(issues_path, "r", encoding="utf-8") as f:
+    with open(issues_path, "r", encoding="utf-8-sig") as f:
         issues = json.load(f)
         
     repo = get_git_remote_repo()
