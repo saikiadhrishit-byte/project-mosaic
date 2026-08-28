@@ -15,6 +15,9 @@ The repository currently tests:
 - constant division by zero;
 - Taskflow concurrency and dependency synchronization;
 - a scheduler stress graph.
+- valid and invalid JSON Block manifests;
+- external graph composition loaded from `examples/graphs/simple.json`.
+- out-of-order external graph composition from `examples/graphs/arithmetic_demo.json`.
 
 The test suite also measures peak concurrency and task timing. It currently demonstrates that independent tasks can run concurrently and that dependent tasks start only after prerequisite completion.
 

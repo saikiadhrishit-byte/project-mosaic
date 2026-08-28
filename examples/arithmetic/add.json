@@ -1,0 +1,8 @@
+{
+  "name": "add",
+  "version": "0.1.0",
+  "kind": "binary",
+  "operation": "add",
+  "inputs": 2,
+  "outputs": 1
+}

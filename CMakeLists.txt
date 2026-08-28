@@ -14,6 +14,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(taskflow)
 
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.3
+)
+FetchContent_MakeAvailable(json)
+
 add_library(nysor INTERFACE)
 target_include_directories(nysor INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_features(nysor INTERFACE cxx_std_20)
@@ -25,9 +32,30 @@ target_link_libraries(nysor_example PRIVATE nysor)
 add_executable(nysor_core_test tests/core_pipeline.cpp)
 target_link_libraries(nysor_core_test PRIVATE nysor)
 
+add_library(nysor_loader STATIC src/block_loader.cpp)
+target_include_directories(nysor_loader PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_compile_features(nysor_loader PUBLIC cxx_std_20)
+target_link_libraries(nysor_loader PUBLIC nysor nlohmann_json::nlohmann_json)
+
+add_executable(nysor_block_loader_test tests/block_loader.cpp)
+target_link_libraries(nysor_block_loader_test PRIVATE nysor_loader)
+
+add_executable(nysor_block_validation_test tests/block_validation.cpp)
+target_link_libraries(nysor_block_validation_test PRIVATE nysor_loader)
+
+add_executable(nysor_external_block_pipeline_test tests/external_block_pipeline.cpp)
+target_link_libraries(nysor_external_block_pipeline_test PRIVATE nysor_loader)
+
+add_executable(nysor_graph_composition_test tests/graph_composition.cpp)
+target_link_libraries(nysor_graph_composition_test PRIVATE nysor_loader)
+
 enable_testing()
 add_test(NAME nysor_example COMMAND nysor_example)
 add_test(NAME nysor_core_test COMMAND nysor_core_test)
+add_test(NAME nysor_block_loader_test COMMAND nysor_block_loader_test)
+add_test(NAME nysor_block_validation_test COMMAND nysor_block_validation_test)
+add_test(NAME nysor_external_block_pipeline_test COMMAND nysor_external_block_pipeline_test)
+add_test(NAME nysor_graph_composition_test COMMAND nysor_graph_composition_test)
 
 if(NYSOR_BUILD_EDITOR)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable GLFW docs" FORCE)

@@ -32,7 +32,22 @@ Blocks -> Block Graph -> Validation -> Dependency Analysis
     -> Taskflow Runtime
 ```
 
-It supports `Input`, `Constant`, binary arithmetic, and `Output` nodes. It validates arity, references, graph closure, constant division by zero, and cycles; lowers valid graphs into a small IR; identifies dependency edges and levels; and executes through Taskflow. Tests also measure concurrency and synchronization. General manifests, a type system, optimization passes, GPU backends, and package loading are not implemented.
+It supports `Input`, `Constant`, binary arithmetic, and `Output` nodes. It validates arity, references, graph closure, constant division by zero, and cycles; lowers valid graphs into a small IR; identifies dependency edges and levels; and executes through Taskflow. The JSON loader validates arithmetic Block manifests and builds graph compositions from external definitions, including forward references resolved through a topological order before the append-only core graph is constructed. Tests also measure concurrency and synchronization. A general type system, optimization passes, GPU backends, and package system are not implemented.
+
+## External Graph Composition
+
+Nysor 0.5 adds a small composition format with node IDs, Block manifest paths,
+named inputs, constants, and an output node:
+
+```text
+Graph JSON -> GraphDefinition -> Dependency Resolution
+           -> Topological Compilation -> Existing Graph -> IR -> Runtime
+```
+
+The composition file describes relationships rather than execution order. The
+prototype accepts nodes in an arbitrary order, resolves their dependencies,
+and only then calls the existing `Graph` API. This is current prototype
+behavior for arithmetic Blocks, not a finalized project or package format.
 
 ## From Prototype to Nysor
 

@@ -1,0 +1,19 @@
+{
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "result",
+      "block": "../arithmetic/multiply.json",
+      "inputs": {"left": "sum", "right": "multiplier"}
+    },
+    {
+      "id": "sum",
+      "block": "../arithmetic/add.json",
+      "inputs": {"left": "a", "right": "b"}
+    },
+    {"id": "multiplier", "block": "constant", "value": 2},
+    {"id": "b", "block": "constant", "value": 5},
+    {"id": "a", "block": "constant", "value": 10}
+  ],
+  "output": "result"
+}

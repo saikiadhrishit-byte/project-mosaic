@@ -1,0 +1,8 @@
+{
+  "name": "multiply",
+  "version": "0.1.0",
+  "kind": "binary",
+  "operation": "multiply",
+  "inputs": 2,
+  "outputs": 1
+}

@@ -1,0 +1,7 @@
+{
+  "name": "add",
+  "version": "0.1.0",
+  "operation": "add",
+  "inputs": 1,
+  "outputs": 1
+}

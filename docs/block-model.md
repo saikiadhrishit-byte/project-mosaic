@@ -49,7 +49,18 @@ The exact identity rules, type syntax, dependency format, implementation loading
 
 ## Current Prototype
 
-The current code does not load manifests. Its Block model is represented directly by C++ node kinds and scalar values. Inputs are positional node references, and the supported operations are the arithmetic nodes documented in [Architecture](architecture.md).
+The current loader supports the minimal manifest fields shown above for binary arithmetic Blocks. It maps `operation` values such as `add` and `multiply` to the internal C++ `BlockKind` without exposing C++ names in JSON. An external graph definition can reference constants and manifest paths, and the loader builds the equivalent Nysor `Graph` for the existing compiler and runtime.
+
+The supported external operations are currently `add`, `subtract`, `multiply`, and `divide`. Inputs are positional node references. This is intentionally a small experiment, not a finalized package or manifest system.
+
+## External Composition
+
+The current graph loader can compose constants and manifest-backed binary
+Blocks from a separate graph JSON file. Node IDs may be referenced before the
+referenced node appears in the file; the loader resolves all names and
+topologically orders the result before constructing the existing core Graph.
+The example in `examples/graphs/arithmetic_demo.json` intentionally places
+`result` before its dependencies and still evaluates to `30`.
 
 ## Composite Blocks
 

@@ -1,0 +1,7 @@
+{
+  "name": "bad",
+  "version": "0.1.0",
+  "operation": "banana",
+  "inputs": 2,
+  "outputs": 1
+}
