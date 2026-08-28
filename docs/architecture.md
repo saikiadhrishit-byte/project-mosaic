@@ -1,6 +1,6 @@
 ﻿# Architecture
 
-Project Nysor is described as an experimental, composable game-engine architecture. The repository documents a proposed layered execution and development model rather than a completed implementation.
+Project Nysor is an experimental architecture for composing software systems. The repository documents both a small working prototype and a broader architecture direction; they must not be treated as the same thing.
 
 The proposed flow is:
 
@@ -21,6 +21,18 @@ CPU / GPU / Other Backends
 ```
 
 This architecture is an intentionally broad research direction. The goal is to make the engine architecture more modular and inspectable, while reaching for a representation that can be validated and optimized before runtime.
+
+## Current Prototype Pipeline
+
+The current code implements a smaller, arithmetic-focused version:
+
+```text
+Blocks -> Block Graph -> Validation -> Dependency Analysis
+    -> Intermediate Representation -> Execution Levels
+    -> Taskflow Runtime
+```
+
+It supports `Input`, `Constant`, binary arithmetic, and `Output` nodes. It validates arity, references, graph closure, constant division by zero, and cycles; lowers valid graphs into a small IR; identifies dependency edges and levels; and executes through Taskflow. Tests also measure concurrency and synchronization. General manifests, a type system, optimization passes, GPU backends, and package loading are not implemented.
 
 ## Layered Interpretation
 

@@ -75,10 +75,16 @@ CPU / GPU / Other Backends
 
 The documentation in this repository is meant to communicate the early architecture clearly enough for engine developers, compiler developers, and contributors to critique and improve it.
 
-- [Vision](docs/VISION.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Block Standard](docs/BLOCK_STANDARD.md)
-- [Compiler and Runtime](docs/COMPILER_AND_RUNTIME.md)
+- [Nysor Documentation](docs/README.md)
+- [Vision](docs/vision.md)
+- [Architecture](docs/architecture.md)
+- [Block Model](docs/block-model.md)
+- [Compatibility](docs/compatibility.md)
+- [Testing and Benchmarks](docs/testing-and-benchmarks.md)
+- [Ecosystem](docs/ecosystem.md)
+- [Open Problems](docs/open-problems.md)
+- [Legacy Block Standard](docs/BLOCK_STANDARD.md)
+- [Compiler and Runtime Notes](docs/COMPILER_AND_RUNTIME.md)
 - [Extensions and Packages](docs/EXTENSIONS_AND_PACKAGES.md)
 - [AI Integration](docs/AI_INTEGRATION.md)
 - [Research](docs/RESEARCH.md)

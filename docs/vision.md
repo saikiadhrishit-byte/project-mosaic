@@ -1,6 +1,20 @@
 ﻿# Vision
 
-Project Nysor explores a game-engine architecture where the engine core is deliberately small, stable, and inspectable, while major engine systems are represented as blocks, graphs, modules, packages, and extension ecosystems.
+Project Nysor explores an architecture for building software systems through composition. Game development is the primary initial application, but Nysor is not intended to be permanently restricted to games.
+
+The central composition model is:
+
+```text
+Blocks -> Systems -> Engines -> Applications / Games
+```
+
+A Block can represent a mathematical operation, physics system, auto-aim system, tree, health bar, sound system, map, AI system, renderer, animation system, input system, or a larger engine. Small Blocks should be able to combine into larger Blocks while retaining the same broad abstraction.
+
+```text
+Primitive Blocks -> Composite Blocks -> Systems -> Engine -> Game
+```
+
+Nysor should support both curated collections for beginners and low-level composition for advanced developers. This is an architecture direction, not a claim that package collections or a beginner workflow already exist.
 
 The central problem this project tries to solve is the mismatch between modern game requirements and the traditional engine model. Many engines provide a fixed stack of rendering, physics, animation, scenes, scripting, gameplay, audio, AI, and networking systems. That model is useful for large production pipelines, but it can become too rigid for highly specialized games, experimental projects, and people who want to reconfigure engine architecture rather than fit game behavior into a preselected abstraction.
 
@@ -36,3 +50,11 @@ Several important questions remain unresolved:
 - How can the architecture avoid becoming too abstract for practical game development teams?
 
 The answers to these questions are not yet decided in this repository.
+
+## Status
+
+**Current Prototype:** The repository contains a small C++ graph, validation, IR, dependency-analysis, scheduling, and Taskflow-backed execution prototype. It demonstrates scalar arithmetic graphs, not a complete general-purpose engine.
+
+**Architecture Direction:** Nysor is being shaped as compiler and composition infrastructure. An editor should author graphs, libraries should collect Blocks, and future ecosystems should supply domain-specific meaning.
+
+**Proposal / Future Work:** Composite Blocks, package collections, multiple ecosystems, flavours, and cross-domain software composition remain experimental directions.
