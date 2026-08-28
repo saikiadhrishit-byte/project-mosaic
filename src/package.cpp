@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 
 #include <fstream>
+#include <algorithm>
 #include <sstream>
 #include <stdexcept>
 
@@ -132,7 +133,25 @@ void PackageRegistry::install(PackageDefinition package) {
       throw std::runtime_error("Version compatibility: FAIL\nPackage: " + id);
     }
   }
-  packages_.emplace(package.id, std::move(package));
+  const auto package_id = package.id;
+  const auto conversion = package.block.conversion;
+  packages_.emplace(package_id, std::move(package));
+  if (conversion) {
+    dissolvers_[conversion->from].push_back(package_id);
+    auto& candidates = dissolvers_[conversion->from];
+    std::sort(candidates.begin(), candidates.end());
+  }
+}
+
+void PackageRegistry::discover(const std::filesystem::path& root) {
+  if (!std::filesystem::is_directory(root)) {
+    throw std::runtime_error("Package discovery root does not exist: " + root.string());
+  }
+  for (const auto& entry : std::filesystem::recursive_directory_iterator(root)) {
+    if (entry.is_regular_file() && entry.path().filename() == "package.json") {
+      install(load_package(entry.path().parent_path()));
+    }
+  }
 }
 
 bool PackageRegistry::contains(const std::string& package_id) const {
@@ -145,6 +164,12 @@ const PackageDefinition& PackageRegistry::get(const std::string& package_id) con
     throw std::out_of_range("Package is not installed: " + package_id);
   }
   return package->second;
+}
+
+std::vector<std::string> PackageRegistry::dissolvers_from(
+    const std::string& specification) const {
+  const auto found = dissolvers_.find(specification);
+  return found == dissolvers_.end() ? std::vector<std::string>{} : found->second;
 }
 
 }  // namespace nysor

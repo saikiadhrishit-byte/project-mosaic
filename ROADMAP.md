@@ -20,6 +20,15 @@ Blocks can declare named specifications such as `core.event` and compose
 through compatible ports without the core knowing their domain semantics. The
 initial proof uses Time, Event, State, and Print Blocks with deliberately small
 runtime behavior. Adapters and dissolvers remain deferred.
+
+## Nysor 0.9 — Connectors and Dissolvers
+
+The 0.9 milestone makes graph resolution an opt-in transformation stage.
+Directly equal specifications remain direct connections; otherwise the package
+registry can discover unary Dissolver Blocks and find a deterministic BFS path
+between specifications. The selected Blocks are inserted into a resolved graph
+with conversion provenance before the existing compiler runs. Nysor core
+contains no domain-specific conversion rules.
 # Roadmap
 
 Project Nysor is deliberately a design and research repository at the beginning of its lifecycle. The roadmap should be read as a staged research and engineering path rather than a promise of a complete engine.

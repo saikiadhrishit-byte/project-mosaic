@@ -51,7 +51,26 @@ The exact identity rules, type syntax, dependency format, implementation loading
 
 The current loader supports the minimal manifest fields shown above for binary arithmetic Blocks. It maps `operation` values such as `add` and `multiply` to the internal C++ `BlockKind` without exposing C++ names in JSON. An external graph definition can reference constants and manifest paths, and the loader builds the equivalent Nysor `Graph` for the existing compiler and runtime.
 
-The supported external operations are currently `add`, `subtract`, `multiply`, `divide`, `sine`, and `time`. Inputs are positional node references. This is intentionally a small experiment, not a finalized package or manifest system.
+The supported external operations include arithmetic, signal, heterogeneous
+prototype operations, and the generic `dissolve` operation used by package-
+provided unary Dissolvers. Inputs are positional node references. This is
+intentionally a small experiment, not a finalized package or manifest system.
+
+A Dissolver declares its conversion separately from its implementation:
+
+```json
+{
+  "kind": "unary",
+  "role": "dissolver",
+  "operation": "dissolve",
+  "inputs": [{"name": "input", "specification": "sensor.raw"}],
+  "outputs": [{"name": "output", "specification": "consumer.value"}],
+  "conversion": {"from": "sensor.raw", "to": "consumer.value", "cost": 1}
+}
+```
+
+The 0.9 planner uses only the declared specification graph. Conversion behavior
+belongs to the package implementation, not to Nysor core.
 
 ## Ports and Specifications
 

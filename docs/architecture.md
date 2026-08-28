@@ -71,6 +71,25 @@ The test suite covers a `Timer -> Event -> State -> Print` pipeline and two
 independent packages that communicate only through `core.event`. Adapters and
 dissolvers remain deferred to a later milestone.
 
+## Nysor 0.9: Connectors and Dissolvers
+
+Nysor 0.9 adds an opt-in graph transformation stage for incompatible ports.
+Equal specifications connect directly and do not create a Connector Block. A
+package-provided unary Dissolver may declare a conversion such as
+`sensor.raw -> consumer.value`. The registry indexes those declarations, and a
+deterministic breadth-first search can find a multi-step path without the core
+implementing the conversion semantics.
+
+```text
+User Graph -> Direct Resolution -> Conversion Search -> Conversion Plan
+           -> Dissolver Insertion -> Resolved Graph -> IR -> Runtime
+```
+
+Inserted Blocks retain their package IDs, port specifications, and path
+provenance in the resolved graph. Conversion cost is recorded for inspection
+but does not influence the 0.9 BFS selection. Multi-input Dissolvers,
+optimization, and domain-specific conversions remain outside this milestone.
+
 ## External Graph Composition
 
 Nysor 0.5 adds a small composition format with node IDs, Block manifest paths,

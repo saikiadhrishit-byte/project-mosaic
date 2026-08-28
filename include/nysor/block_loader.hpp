@@ -3,6 +3,7 @@
 #include "nysor/graph.hpp"
 
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -15,6 +16,12 @@ struct PortDefinition {
   std::string name;
   std::string type;
   std::string specification;
+};
+
+struct ConversionMetadata {
+  std::string from;
+  std::string to;
+  int cost = 1;
 };
 
 enum class PortDirection {
@@ -41,6 +48,8 @@ struct BlockDefinition {
   int output_count = 0;
   std::vector<PortDefinition> input_ports;
   std::vector<PortDefinition> output_ports;
+  std::string role = "normal";
+  std::optional<ConversionMetadata> conversion;
 };
 
 struct GraphNodeDefinition {

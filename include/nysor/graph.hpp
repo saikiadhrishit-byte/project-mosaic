@@ -22,6 +22,7 @@ enum class BlockKind {
   Event,
   State,
   Print,
+  Dissolver,
   Output,
 };
 
@@ -61,7 +62,7 @@ class Graph {
 
   NodeId add_unary(BlockKind kind, NodeId input) {
     if (kind != BlockKind::Sine && kind != BlockKind::Event &&
-      kind != BlockKind::Print) {
+        kind != BlockKind::Print && kind != BlockKind::Dissolver) {
       throw std::invalid_argument("add_unary requires a supported unary block");
     }
     return add_node(kind, {input});

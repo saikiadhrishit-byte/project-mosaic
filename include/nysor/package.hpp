@@ -3,7 +3,9 @@
 #include "nysor/block_loader.hpp"
 
 #include <filesystem>
+#include <algorithm>
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 namespace nysor {
@@ -33,11 +35,14 @@ bool version_satisfies(const std::string& version,
 class PackageRegistry {
 public:
   void install(PackageDefinition package);
+  void discover(const std::filesystem::path& root);
   bool contains(const std::string& package_id) const;
   const PackageDefinition& get(const std::string& package_id) const;
+  std::vector<std::string> dissolvers_from(const std::string& specification) const;
 
 private:
   std::unordered_map<std::string, PackageDefinition> packages_;
+  std::unordered_map<std::string, std::vector<std::string>> dissolvers_;
 };
 
 }  // namespace nysor

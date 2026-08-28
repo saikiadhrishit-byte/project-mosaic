@@ -98,8 +98,9 @@ BlockKind parse_operation(const std::string& operation) {
   if (operation == "event") return BlockKind::Event;
   if (operation == "state") return BlockKind::State;
   if (operation == "print") return BlockKind::Print;
+  if (operation == "dissolve") return BlockKind::Dissolver;
   throw std::invalid_argument("Unsupported operation: " + operation +
-                              ". Supported operations: add, subtract, multiply, divide, sine, time, event, state, print");
+                              ". Supported operations: add, subtract, multiply, divide, sine, time, event, state, print, dissolve");
 }
 
 BlockDefinition load_block(const std::filesystem::path& path) {
@@ -109,6 +110,25 @@ BlockDefinition load_block(const std::filesystem::path& path) {
   definition.version = required_string(json, path, "version");
   definition.kind = json.contains("kind") ? required_string(json, path, "kind") : "binary";
   definition.operation = required_string(json, path, "operation");
+  definition.role = json.contains("role") ? required_string(json, path, "role") : "normal";
+  if (json.contains("conversion")) {
+    if (!json["conversion"].is_object() ||
+        !json["conversion"].contains("from") || !json["conversion"]["from"].is_string() ||
+        !json["conversion"].contains("to") || !json["conversion"]["to"].is_string()) {
+      throw manifest_error(path, "conversion", "Expected from and to specifications");
+    }
+    ConversionMetadata metadata{
+        json["conversion"]["from"].get<std::string>(),
+        json["conversion"]["to"].get<std::string>(), 1};
+    if (json["conversion"].contains("cost")) {
+      if (!json["conversion"]["cost"].is_number_integer() ||
+          json["conversion"]["cost"].get<int>() < 1) {
+        throw manifest_error(path, "conversion.cost", "Expected a positive integer");
+      }
+      metadata.cost = json["conversion"]["cost"].get<int>();
+    }
+    definition.conversion = metadata;
+  }
   if (json.contains("inputs") && json["inputs"].is_array()) {
     definition.input_ports = parse_ports(json, path, "inputs");
     definition.input_count = static_cast<int>(definition.input_ports.size());
@@ -125,6 +145,17 @@ BlockDefinition load_block(const std::filesystem::path& path) {
     if (definition.kind != "binary" && definition.kind != "unary" &&
       definition.kind != "source" && definition.kind != "state") {
     throw manifest_error(path, "kind", "Unsupported kind: " + definition.kind);
+  }
+  if (definition.role != "normal" && definition.role != "connector" &&
+      definition.role != "dissolver") {
+    throw manifest_error(path, "role", "Unsupported role: " + definition.role);
+  }
+  if (definition.role == "dissolver") {
+    if (definition.kind != "unary" || !definition.conversion) {
+      throw manifest_error(path, "conversion", "Dissolvers require one input, one output, and conversion metadata");
+    }
+  } else if (definition.conversion) {
+    throw manifest_error(path, "role", "Conversion metadata requires role dissolver");
   }
   try {
     parse_operation(definition.operation);
@@ -144,6 +175,13 @@ BlockDefinition load_block(const std::filesystem::path& path) {
   }
   if (definition.output_count != 1) {
     throw manifest_error(path, "outputs", "Blocks require exactly 1 output");
+  }
+  if (definition.conversion) {
+    if (definition.input_ports.size() != 1 || definition.output_ports.size() != 1 ||
+        definition.input_ports.front().specification != definition.conversion->from ||
+        definition.output_ports.front().specification != definition.conversion->to) {
+      throw manifest_error(path, "conversion", "Conversion metadata does not match the Block ports");
+    }
   }
   if (definition.input_ports.empty()) {
     definition.input_ports = definition.kind == "binary"

@@ -32,7 +32,7 @@ target_link_libraries(nysor_example PRIVATE nysor)
 add_executable(nysor_core_test tests/core_pipeline.cpp)
 target_link_libraries(nysor_core_test PRIVATE nysor)
 
-add_library(nysor_loader STATIC src/block_loader.cpp src/package.cpp)
+add_library(nysor_loader STATIC src/block_loader.cpp src/package.cpp src/conversion.cpp)
 target_include_directories(nysor_loader PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_features(nysor_loader PUBLIC cxx_std_20)
 target_link_libraries(nysor_loader PUBLIC nysor nlohmann_json::nlohmann_json)
@@ -73,6 +73,9 @@ target_link_libraries(nysor_08_event_pipeline_test PRIVATE nysor_loader)
 add_executable(nysor_08_heterogeneous_integration_test tests/0.8/heterogeneous_integration.cpp)
 target_link_libraries(nysor_08_heterogeneous_integration_test PRIVATE nysor_loader)
 
+add_executable(nysor_09_dissolver_resolution_test tests/0.9/dissolver_resolution.cpp)
+target_link_libraries(nysor_09_dissolver_resolution_test PRIVATE nysor_loader)
+
 enable_testing()
 add_test(NAME nysor_example COMMAND nysor_example)
 add_test(NAME nysor_core_test COMMAND nysor_core_test)
@@ -88,6 +91,7 @@ add_test(NAME nysor_08_heterogeneous_blocks_test COMMAND nysor_08_heterogeneous_
 add_test(NAME nysor_08_specification_compatibility_test COMMAND nysor_08_specification_compatibility_test)
 add_test(NAME nysor_08_event_pipeline_test COMMAND nysor_08_event_pipeline_test)
 add_test(NAME nysor_08_heterogeneous_integration_test COMMAND nysor_08_heterogeneous_integration_test)
+add_test(NAME nysor_09_dissolver_resolution_test COMMAND nysor_09_dissolver_resolution_test)
 
 add_custom_target(check
     COMMAND ${CMAKE_CTEST_COMMAND} --test-dir ${CMAKE_BINARY_DIR} --output-on-failure
@@ -106,6 +110,7 @@ add_custom_target(check
         nysor_08_specification_compatibility_test
         nysor_08_event_pipeline_test
         nysor_08_heterogeneous_integration_test
+        nysor_09_dissolver_resolution_test
     USES_TERMINAL
 )
 
@@ -126,6 +131,7 @@ if(WIN32)
         nysor_08_specification_compatibility_test
         nysor_08_event_pipeline_test
         nysor_08_heterogeneous_integration_test
+        nysor_09_dissolver_resolution_test
         PROPERTIES ENVIRONMENT "PATH=${NYSOR_COMPILER_RUNTIME_DIR};$ENV{PATH}"
     )
 endif()

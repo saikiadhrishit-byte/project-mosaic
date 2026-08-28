@@ -120,9 +120,9 @@ Project Nysor is an experimental architecture and research project. It is not a 
 4. gathering references to related technologies;
 5. creating a roadmap for proof-of-concept prototypes.
 
-## Current Milestone: Nysor 0.8 (Heterogeneous Blocks)
+## Current Milestone: Nysor 0.9 (Connectors and Dissolvers)
 
-Nysor 0.8 is a milestone release of the experimental prototype. The architecture remains experimental and open to developer feedback. Nysor now supports:
+Nysor 0.9 is a milestone release of the experimental prototype. The architecture remains experimental and open to developer feedback. Nysor now supports:
 
 - External Block definitions
 - External graph composition
@@ -141,6 +141,9 @@ Nysor 0.8 is a milestone release of the experimental prototype. The architecture
 - Heterogeneous Event, State, Print, and Time Blocks
 - Specification-based port compatibility
 - Independent package composition through shared specifications
+- Package-provided Dissolver Blocks
+- Deterministic opt-in conversion-path planning
+- Resolved graph conversion provenance
 
 See the [Nysor architecture documentation](docs/architecture.md) for the current implementation boundary, architecture direction, and open problems.
 

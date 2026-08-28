@@ -39,4 +39,8 @@ Nysor should provide infrastructure to install, connect, execute, and test such 
 
 Nysor Core should provide composition infrastructure, diagnostics, and test execution. Block makers should provide implementations, specifications, compatibility claims, documentation, and relevant tests. A passing build or integration test is evidence for the tested conditions, not a universal compatibility guarantee.
 
-The current prototype has scalar numeric operations only. Typed cross-ecosystem compatibility and adapters are architecture direction or future work.
+Nysor 0.9 supports package-declared specifications and opt-in conversion-path
+planning through unary Dissolver Blocks. The core compares specification IDs
+and traverses declarations supplied by installed packages; it does not contain
+domain-specific conversions. Conversion costs are retained as metadata but are
+not used for path selection yet.
