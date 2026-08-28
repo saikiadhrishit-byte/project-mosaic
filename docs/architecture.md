@@ -34,6 +34,39 @@ Blocks -> Block Graph -> Validation -> Dependency Analysis
 
 It supports `Input`, `Constant`, binary arithmetic, and `Output` nodes. It validates arity, references, graph closure, constant division by zero, and cycles; lowers valid graphs into a small IR; identifies dependency edges and levels; and executes through Taskflow. Tests also measure concurrency and synchronization. General manifests, a type system, optimization passes, GPU backends, and package loading are not implemented.
 
+## From Prototype to Nysor
+
+The current prototype uses arithmetic nodes as the smallest experiment for
+Nysor's architecture. Arithmetic is deliberately simple: it makes graph
+construction, validation, compilation, dependency analysis, and execution
+observable without requiring a renderer or a complete game engine.
+
+The intended generalization is:
+
+```text
+Arithmetic Nodes
+    |
+  General Blocks
+
+Arithmetic Graph
+    |
+    Block Graph
+
+Arithmetic Dependencies
+    |
+  System Dependencies
+
+Task Execution
+    |
+Composable System Execution
+```
+
+The prototype therefore answers a narrow architectural question: can Nysor
+transform a graph of composable operations into an executable dependency plan?
+Future work will test whether the same boundaries remain useful for larger
+Blocks, systems, and engine ecosystems. That generalization is not yet
+implemented.
+
 ## Layered Interpretation
 
 ### 1. Developer / Editor
